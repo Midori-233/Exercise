@@ -1,6 +1,7 @@
 package com.sendriods.demo.Service;
 
 import com.sendriods.demo.Dao.UserRepository;
+import com.sendriods.demo.Domain.Division;
 import com.sendriods.demo.Domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -69,6 +70,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User deleteUser(User user) {
+        userRepository.delete(user);
+        return user;
+    }
+
+    @Override
     public Page<User> paging(int pageNum, int pageSize) {
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
         Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
@@ -86,8 +93,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User setUserToDivision(List division, User user) {
-        user.setDivision(division);
+    public User setDivisionList(List divisionList, User user) {
+        user.setDivisionList(divisionList);
+        userRepository.save(user);
+        return user;
+    }
+
+    public User addDivisionList(List divisionList, User user) {
+        for (Object division : divisionList) {
+            user.addDivision((Division) division);
+        }
         userRepository.save(user);
         return user;
     }

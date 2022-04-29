@@ -23,7 +23,7 @@ public class UserController {
     private DivisionService divisionService;
 
     @PostMapping("/addUser")
-    public Result<User> addUserController(@RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
+    public Result<User> addUser(@RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
         User user = userService.addUser(name, age, passwd);
         if (user != null) {
             return Result.success(user, "注册成功！");
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/updateUser")
-    public Result<User> updateUserController(@RequestParam long id, @RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
+    public Result<User> updateUser(@RequestParam long id, @RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
         User user = userService.updateUser(id, name, age, passwd);
         if (user != null) {
             return Result.success(user, "更新成功！");
@@ -63,9 +63,9 @@ public class UserController {
     }
 
     @PostMapping("/getAllUser")
-    public List<User> getAllUser() {
+    public Result getAllUser() {
         List<User> userList = userService.getAllUser();
-        return userList;
+        return Result.success(userList, "succeed!");
     }
 
     @GetMapping("/hello")
@@ -82,6 +82,12 @@ public class UserController {
     @PostMapping("/deleteById")
     public Result deleteUserById(@RequestParam long id) {
         userService.deleteUserById(id);
+        return Result.success("OK!");
+    }
+
+    @PostMapping("/deleteUser")
+    public Result deleteUser(User user) {
+        userService.deleteUser(user);
         return Result.success("OK!");
     }
 
@@ -103,6 +109,6 @@ public class UserController {
         Division division = divisionService.getDivisionById(divisionId);
         List<Division> divisionList = new ArrayList<>();
         divisionList.add(division);
-        return Result.success(userService.setUserToDivision(divisionList, user), "succeed！");
+        return Result.success(userService.setDivisionList(divisionList, user), "succeed！");
     }
 }

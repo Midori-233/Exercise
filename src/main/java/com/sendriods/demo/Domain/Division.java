@@ -1,7 +1,5 @@
 package com.sendriods.demo.Domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,9 +19,12 @@ public class Division implements Serializable {
     @Column(name = "divisionId")
     private Integer divisionId;
 
-    @ManyToMany(mappedBy = "divisionList", cascade = CascadeType.REFRESH)
-    @JsonIgnore
-    @JsonIgnoreProperties
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "divisionList")
+/*    @JoinTable(name = "Division_User",
+            joinColumns = {
+                @JoinColumn(name = "division_id", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "user_id", referencedColumnName ="id")})*/
     private List<User> userList;
 
     public Division() {
@@ -34,6 +35,14 @@ public class Division implements Serializable {
         this.divisionName = divisionName;
         this.divisionId = divisionId;
         this.userList = userList;
+    }
+
+    public void addUser(User user) {
+        userList.add(user);
+    }
+
+    public void removeUser(User user) {
+        userList.remove(user);
     }
 
     @Override

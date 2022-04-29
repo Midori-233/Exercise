@@ -28,6 +28,7 @@ public class DivisionController {
     }
 
     @PostMapping("/getDivisionByName")
+
     public Result<Division> getDivisionByName(String divisionName) {
         Division division = divisionService.getDivisionByName(divisionName);
         return Result.success(division, "succeed!");

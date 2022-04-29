@@ -16,7 +16,6 @@
 package com.sendriods.demo.Domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -36,16 +35,6 @@ import java.util.Objects;
 @Data
 @Table(name = "user")
 public class User implements Serializable {
-	public User() {
-	}
-
-	public User(long id, String name, Integer age, String passwd) {
-		this.id = id;
-		this.name = name;
-		this.age = age;
-		this.passwd = passwd;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -59,18 +48,29 @@ public class User implements Serializable {
 	@Column(name = "passwd")
 	private String passwd;
 
-	@ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "userList")
-	//@JoinColumn(name = "division_id")
+	@ManyToMany
 	@JsonIgnore
-	@JsonIgnoreProperties
+	//@JsonIgnoreProperties
+	//@JoinColumn(name = "division_id")
 	private List<Division> divisionList;
 
-	public List<Division> getDivision() {
-		return divisionList;
+	public User() {
 	}
 
-	public void setDivision(List<Division> divisionList) {
+	public User(long id, String name, Integer age, String passwd, List<Division> divisionList) {
+		this.id = id;
+		this.name = name;
+		this.age = age;
+		this.passwd = passwd;
 		this.divisionList = divisionList;
+	}
+
+	public void addDivision(Division division) {
+		divisionList.add(division);
+	}
+
+	public void removeDivision(Division division) {
+		divisionList.remove(division);
 	}
 
 	@Override

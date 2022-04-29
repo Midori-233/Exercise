@@ -20,5 +20,7 @@ public interface DivisionService {
 
     Division deleteDivisionById(long id);
 
+    Division deleteUser(Division division);
+
     Division removeUserFromDivision(long userId, long divisionId);
 }
