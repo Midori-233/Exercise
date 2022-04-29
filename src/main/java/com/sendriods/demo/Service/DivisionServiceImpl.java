@@ -53,7 +53,7 @@ public class DivisionServiceImpl implements DivisionService {
     public Division addUserToDivision(Division division, User user) {
         List<Division> divisionList = new ArrayList<>();
         divisionList.add(division);
-        user.setDivision(divisionList);
+        user.setDivisionList(divisionList);
         division.addUser(user);
         userRepository.save(user);
         divisionRepository.save(division);
@@ -77,6 +77,12 @@ public class DivisionServiceImpl implements DivisionService {
     public Division deleteDivisionById(long id) {
         // TODO 可以 deleteById
         Division division = divisionRepository.findById(id);
+        divisionRepository.delete(division);
+        return division;
+    }
+
+    @Override
+    public Division deleteUser(Division division) {
         divisionRepository.delete(division);
         return division;
     }

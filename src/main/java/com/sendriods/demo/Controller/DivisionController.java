@@ -35,6 +35,7 @@ public class DivisionController {
 
     // TODO post 虽然时"万能"的，但是 restful 的风格来说，这里应该用 get
     @PostMapping("/getDivisionByName")
+
     public Result<Division> getDivisionByName(String divisionName) {
         Division division = divisionService.getDivisionByName(divisionName);
         return Result.success(division, "succeed!");

@@ -19,11 +19,15 @@ public interface UserService {
 
     User deleteUserById(long id);
 
+    User deleteUser(User user);
+
     User getUserById(long id);
 
     Page<User> paging(int pageNum, int pageSize);
 
     Page<User> findByAgeLessThanPage(int age, int pageNum, int pageSize);
 
-    User setUserToDivision(List division, User user);
+    User setDivisionList(List divisionList, User user);
+
+    User addDivisionList(List divisionList, User user);
 }
