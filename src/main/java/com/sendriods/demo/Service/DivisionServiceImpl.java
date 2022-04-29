@@ -19,13 +19,13 @@ public class DivisionServiceImpl implements DivisionService {
     @Resource
     private UserRepository userRepository;
 
-//    TODO 目前我们都使用构造函数这种注入方式，不使用注解注入（controller 注入同理）
-//    final private DivisionRepository divisionRepository;
-//    final private UserRepository userRepository;
-//    public DivisionServiceImpl(DivisionRepository divisionRepository, UserRepository userRepository) {
-//        this.divisionRepository = divisionRepository;
-//        this.userRepository = userRepository;
-//    }
+/*    TODO 目前我们都使用构造函数这种注入方式，不使用注解注入（controller 注入同理）
+    final private DivisionRepository divisionRepository;
+    final private UserRepository userRepository;
+    public DivisionServiceImpl(DivisionRepository divisionRepository, UserRepository userRepository) {
+        this.divisionRepository = divisionRepository;
+        this.userRepository = userRepository;
+    }*/
 
     @Override
     public Division getDivisionByName(String divisionName) {
@@ -74,7 +74,7 @@ public class DivisionServiceImpl implements DivisionService {
         return divisionRepository.findAll();
     }
 
-    public Division deleteDivisionById(long id) {
+    public Division deleteById(long id) {
         // TODO 可以 deleteById
         Division division = divisionRepository.findById(id);
         divisionRepository.delete(division);

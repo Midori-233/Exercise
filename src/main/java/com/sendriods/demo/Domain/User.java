@@ -52,8 +52,6 @@ public class User implements Serializable {
     //  需要根据业务需求来进行添加，绝不能一上来就给 ALL。
     @ManyToMany
 	@JsonIgnore
-	//@JsonIgnoreProperties
-	//@JoinColumn(name = "division_id")
     // TODO 对于 多对多关系 和 一对多 关系中使用 Set 还是 List 是要有考量的
     //  1. 如果对顺序有要求，一般用 List，否则用 Set
     //  2. sql 层面，更新 list 的时候，会先将原来的元素全部remove 然后再 一条条 insert

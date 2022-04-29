@@ -16,18 +16,13 @@ public class Division implements Serializable {
     private Long id;
     // TODO column name 一般是用 _ 分隔单词 而不是驼峰命名法
     //  也可以不填直接用 hibernate 生成，一般遇到数据库关键字时才会指定，比如 row column 之类的
-    @Column(name = "divisionName")
+    @Column(name = "division_name")
     private String divisionName;
-    @Column(name = "divisionId")
+    @Column(name = "division_id")
     private Integer divisionId;
 
     // FIXME toString 循环调用了
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "divisionList")
-/*    @JoinTable(name = "Division_User",
-            joinColumns = {
-                @JoinColumn(name = "division_id", referencedColumnName = "id")},
-            inverseJoinColumns = {
-                @JoinColumn(name = "user_id", referencedColumnName ="id")})*/
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "divisionList")
     private List<User> userList;
 
     public Division() {

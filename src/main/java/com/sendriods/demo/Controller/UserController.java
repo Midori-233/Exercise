@@ -5,14 +5,17 @@ import com.sendriods.demo.Domain.User;
 import com.sendriods.demo.Service.DivisionService;
 import com.sendriods.demo.Service.UserService;
 import com.sendriods.demo.utils.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@Slf4j
 @RequestMapping("/user")
 public class UserController {
 
@@ -23,38 +26,39 @@ public class UserController {
     private DivisionService divisionService;
 
     @PostMapping("/addUser")
-    public Result<User> addUser(@RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
+    public Result<User> addUser(
+            @RequestParam String name,
+            @RequestParam Integer age,
+            @RequestParam String passwd) {
         // TODO jpa save/update 之后是不会返回 null 的，如果发生错误的话会抛出异常而不会返回 null
-        User user = userService.addUser(name, age, passwd);
-        if (user != null) {
+        try {
+            User user = userService.addUser(name, age, passwd);
             return Result.success(user, "注册成功！");
-        } else {
-            return Result.error("123", "注册失败！");
+        } catch (Exception exception) {
+            return Result.error(exception.getMessage(), "注册失败！");
         }
     }
 
     // TODO update 使用 @PutMapping
-    @PostMapping("/updateUser")
+    @PutMapping("/updateUser")
     public Result<User> updateUser(@RequestParam long id, @RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
-        User user = userService.updateUser(id, name, age, passwd);
-        if (user != null) {
+        try {
+            User user = userService.updateUser(id, name, age, passwd);
             return Result.success(user, "更新成功！");
-        } else {
-            return Result.error("123", "更新失败！");
+        } catch (Exception exception) {
+            return Result.error(exception.getMessage(), "更新失败！");
         }
     }
 
     @PostMapping("/getUserById")
-    public Result<User> getUserById(@RequestParam long id) {
+    public Result<User> getUserById(@RequestParam Optional<Long> id) {
         // TODO 对于可能为空的类型，建议使用 Optional
         //  参考 https://github.com/100TB/OnJava8/blob/master/docs/book/14-Streams.md#optional%E7%B1%BB
         //  顺便可以看看 Stream 的 API
-        User user = userService.getUserById(id);
-        if (user != null) {
-            return Result.success(user, "OK");
-        } else {
-            return Result.error("234", "N");
-        }
+        if (id.isPresent())
+            return Result.success(userService.getUserById(id.get().longValue()), "OK");
+        else
+            return Result.error("234", "No Value Input");
     }
 
     @PostMapping("/getUserByName")
