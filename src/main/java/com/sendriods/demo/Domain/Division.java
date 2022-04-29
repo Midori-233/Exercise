@@ -16,11 +16,14 @@ public class Division implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    // TODO column name 一般是用 _ 分隔单词 而不是驼峰命名法
+    //  也可以不填直接用 hibernate 生成，一般遇到数据库关键字时才会指定，比如 row column 之类的
     @Column(name = "divisionName")
     private String divisionName;
     @Column(name = "divisionId")
     private Integer divisionId;
 
+    // FIXME toString 循环调用了
     @ManyToMany(mappedBy = "divisionList", cascade = CascadeType.REFRESH)
     @JsonIgnore
     @JsonIgnoreProperties
@@ -36,6 +39,7 @@ public class Division implements Serializable {
         this.userList = userList;
     }
 
+    // FIXME equals 循环调用了
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

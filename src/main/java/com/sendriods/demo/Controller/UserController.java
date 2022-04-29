@@ -24,6 +24,7 @@ public class UserController {
 
     @PostMapping("/addUser")
     public Result<User> addUserController(@RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
+        // TODO jpa save/update 之后是不会返回 null 的，如果发生错误的话会抛出异常而不会返回 null
         User user = userService.addUser(name, age, passwd);
         if (user != null) {
             return Result.success(user, "注册成功！");
@@ -32,6 +33,7 @@ public class UserController {
         }
     }
 
+    // TODO update 使用 @PutMapping
     @PostMapping("/updateUser")
     public Result<User> updateUserController(@RequestParam long id, @RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
         User user = userService.updateUser(id, name, age, passwd);
@@ -44,6 +46,9 @@ public class UserController {
 
     @PostMapping("/getUserById")
     public Result<User> getUserById(@RequestParam long id) {
+        // TODO 对于可能为空的类型，建议使用 Optional
+        //  参考 https://github.com/100TB/OnJava8/blob/master/docs/book/14-Streams.md#optional%E7%B1%BB
+        //  顺便可以看看 Stream 的 API
         User user = userService.getUserById(id);
         if (user != null) {
             return Result.success(user, "OK");

@@ -1,5 +1,6 @@
 package com.sendriods.demo.utils;
 
+// TODO 转换成 builder 形式
 public class Result<T> {
     private String code;
     private String msg;
