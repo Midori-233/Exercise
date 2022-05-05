@@ -48,12 +48,18 @@ public class DivisionController {
     @GetMapping("/getDivisionById")
     public Division getDivisionById(
             @RequestParam long id) {
-        return divisionService.getDivisionById(id);
+        try {
+            return divisionService.getDivisionById(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     // TODO 如果参数太多或者json 结构复杂时（比如有多层结构时）考虑新建一个 model 类接收参数
     @PutMapping("/updateDivision")
     public Result<Division> updateDivision(
+            /*@ModelAttribute Division division,*/
             @RequestParam Long id,
             @RequestParam String divisionName,
             @RequestParam Integer divisionId) {

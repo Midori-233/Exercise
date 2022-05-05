@@ -72,7 +72,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/getAllUser")
+    @GetMapping("/getAllUser")
     public Result getAllUser() {
         List<User> userList = userService.getAllUser();
         return Result.success(userList, "succeed!");
