@@ -10,9 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -116,8 +117,8 @@ public class UserController {
     public Result setDivisionToUser(@RequestParam long divisionId, @RequestParam long userId) {
         User user = userService.getUserById(userId);
         Division division = divisionService.getDivisionById(divisionId);
-        List<Division> divisionList = new ArrayList<>();
-        divisionList.add(division);
-        return Result.success(userService.setDivisionList(divisionList, user), "succeed！");
+        Set<Division> divisionSet = new HashSet<>();
+        divisionSet.add(division);
+        return Result.success(userService.setDivisionSet(divisionSet, user), "succeed！");
     }
 }

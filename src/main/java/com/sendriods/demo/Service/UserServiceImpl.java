@@ -9,24 +9,30 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Resource
-    private UserRepository userRepository;
+    /*
+        @Resource
+    */
+    final private UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User getUserByName(String name) {
-        User user = userRepository.findByName(name);
+        User user = userRepository.findByName(name).get();
         return user;
     }
 
     @Override
     public User getUserById(long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).get();
         return user;
     }
 
@@ -42,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(long id, String name, Integer age, String passwd) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).get();
         user.setName(name);
         user.setAge(age);
         user.setPasswd(passwd);
@@ -57,14 +63,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User deleteUserByName(String name) {
-        User user = userRepository.findByName(name);
+        User user = userRepository.findByName(name).get();
         userRepository.delete(user);
         return user;
     }
 
     @Override
     public User deleteUserById(long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).get();
         userRepository.delete(user);
         return user;
     }
@@ -93,14 +99,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User setDivisionList(List divisionList, User user) {
-        user.setDivisionList(divisionList);
+    public User setDivisionSet(Set divisionSet, User user) {
+        user.setDivisionSet(divisionSet);
         userRepository.save(user);
         return user;
     }
 
-    public User addDivisionList(List divisionList, User user) {
-        for (Object division : divisionList) {
+    public User addDivisionSet(Set divisionSet, User user) {
+        for (Object division : divisionSet) {
             user.addDivision((Division) division);
         }
         userRepository.save(user);

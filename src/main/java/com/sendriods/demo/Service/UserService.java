@@ -4,6 +4,7 @@ import com.sendriods.demo.Domain.User;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -27,7 +28,7 @@ public interface UserService {
 
     Page<User> findByAgeLessThanPage(int age, int pageNum, int pageSize);
 
-    User setDivisionList(List divisionList, User user);
+    User setDivisionSet(Set divisionSet, User user);
 
-    User addDivisionList(List divisionList, User user);
+    User addDivisionSet(Set divisionSet, User user);
 }

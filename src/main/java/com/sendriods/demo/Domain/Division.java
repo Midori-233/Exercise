@@ -4,8 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,25 +22,25 @@ public class Division implements Serializable {
     private Integer divisionId;
 
     // FIXME toString 循环调用了
-    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "divisionList")
-    private List<User> userList;
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "divisionSet")
+    private Set<User> userSet;
 
     public Division() {
     }
 
-    public Division(long id, String divisionName, Integer divisionId, List<User> userList) {
+    public Division(long id, String divisionName, Integer divisionId, Set<User> userSet) {
         this.id = id;
         this.divisionName = divisionName;
         this.divisionId = divisionId;
-        this.userList = userList;
+        this.userSet = userSet;
     }
 
     public void addUser(User user) {
-        userList.add(user);
+        userSet.add(user);
     }
 
     public void removeUser(User user) {
-        userList.remove(user);
+        userSet.remove(user);
     }
 
     // FIXME equals 循环调用了
@@ -49,11 +49,11 @@ public class Division implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Division division = (Division) o;
-        return Objects.equals(id, division.id) && Objects.equals(divisionName, division.divisionName) && Objects.equals(divisionId, division.divisionId) && Objects.equals(userList, division.userList);
+        return Objects.equals(id, division.id) && Objects.equals(divisionName, division.divisionName) && Objects.equals(divisionId, division.divisionId) && Objects.equals(userSet, division.userSet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, divisionName, divisionId, userList);
+        return Objects.hash(id, divisionName, divisionId, userSet);
     }
 }

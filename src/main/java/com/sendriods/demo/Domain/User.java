@@ -20,8 +20,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Simple JavaBean domain object with an id property. Used as a base class for objects
@@ -49,33 +50,33 @@ public class User implements Serializable {
 	private String passwd;
 
 	// TODO 关于 cascade 的考量，默认情况下是不加的。
-    //  需要根据业务需求来进行添加，绝不能一上来就给 ALL。
-    @ManyToMany
+	//  需要根据业务需求来进行添加，绝不能一上来就给 ALL。
+	@ManyToMany
 	@JsonIgnore
-    // TODO 对于 多对多关系 和 一对多 关系中使用 Set 还是 List 是要有考量的
-    //  1. 如果对顺序有要求，一般用 List，否则用 Set
-    //  2. sql 层面，更新 list 的时候，会先将原来的元素全部remove 然后再 一条条 insert
-    //              更新 set 的时候，只会修改有变动的那一条数据
-    //  3. 一般这种集合最好给个默认值，不然很容易出现空指针异常（这是我个人的理解，公司没有硬性规定，也没有一个定论）
-    private List<Division> divisionList;
+	// TODO 对于 多对多关系 和 一对多 关系中使用 Set 还是 List 是要有考量的
+	//  1. 如果对顺序有要求，一般用 List，否则用 Set
+	//  2. sql 层面，更新 list 的时候，会先将原来的元素全部remove 然后再 一条条 insert
+	//              更新 set 的时候，只会修改有变动的那一条数据
+	//  3. 一般这种集合最好给个默认值，不然很容易出现空指针异常（这是我个人的理解，公司没有硬性规定，也没有一个定论）
+	private Set<Division> divisionSet = new HashSet<>();
 
 	public User() {
 	}
 
-	public User(long id, String name, Integer age, String passwd, List<Division> divisionList) {
+	public User(long id, String name, Integer age, String passwd, Set<Division> divisionSet) {
 		this.id = id;
 		this.name = name;
 		this.age = age;
 		this.passwd = passwd;
-		this.divisionList = divisionList;
+		this.divisionSet = divisionSet;
 	}
 
 	public void addDivision(Division division) {
-		divisionList.add(division);
+		divisionSet.add(division);
 	}
 
 	public void removeDivision(Division division) {
-		divisionList.remove(division);
+		divisionSet.remove(division);
 	}
 
 	@Override
@@ -83,11 +84,11 @@ public class User implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		User user = (User) o;
-		return id == user.id && Objects.equals(name, user.name) && Objects.equals(age, user.age) && Objects.equals(passwd, user.passwd) && Objects.equals(divisionList, user.divisionList);
+		return id == user.id && Objects.equals(name, user.name) && Objects.equals(age, user.age) && Objects.equals(passwd, user.passwd) && Objects.equals(divisionSet, user.divisionSet);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, age, passwd, divisionList);
+		return Objects.hash(id, name, age, passwd, divisionSet);
 	}
 }
