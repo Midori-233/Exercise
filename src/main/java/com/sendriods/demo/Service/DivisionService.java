@@ -12,7 +12,7 @@ public interface DivisionService {
 
     Division addDivision(String divisionName, Integer classId);
 
-    Division updateDivision(long id, String divisionName, Integer classId);
+    Division updateDivision(Division division);
 
     List<Division> getAllDivision();
 

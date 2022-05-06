@@ -37,11 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addUser(String name, Integer age, String passwd) {
-        User user = new User();
-        user.setName(name);
-        user.setAge((Integer) age);
-        user.setPasswd(passwd);
+    public User addUser(User user) {
         userRepository.save(user);
         return user;
     }

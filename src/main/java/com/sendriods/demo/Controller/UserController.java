@@ -28,27 +28,19 @@ public class UserController {
 
     @PostMapping("/addUser")
     public Result<User> addUser(
-            @RequestParam String name,
+            @RequestBody User user
+/*            @RequestParam String name,
             @RequestParam Integer age,
-            @RequestParam String passwd) {
+            @RequestParam String passwd*/) {
         // TODO jpa save/update 之后是不会返回 null 的，如果发生错误的话会抛出异常而不会返回 null
-        try {
-            User user = userService.addUser(name, age, passwd);
-            return Result.success(user, "注册成功！");
-        } catch (Exception exception) {
-            return Result.error(exception.getMessage(), "注册失败！");
-        }
+        userService.addUser(user);
+        return Result.success(user);
     }
 
     // TODO update 使用 @PutMapping
     @PutMapping("/updateUser")
-    public Result<User> updateUser(@RequestParam long id, @RequestParam String name, @RequestParam Integer age, @RequestParam String passwd) {
-        try {
-            User user = userService.updateUser(id, name, age, passwd);
-            return Result.success(user, "更新成功！");
-        } catch (Exception exception) {
-            return Result.error(exception.getMessage(), "更新失败！");
-        }
+    public Result<User> updateUser(@RequestBody User user) {
+        return Result.success(user, "更新成功！");
     }
 
     @PostMapping("/getUserById")
@@ -56,14 +48,19 @@ public class UserController {
         // TODO 对于可能为空的类型，建议使用 Optional
         //  参考 https://github.com/100TB/OnJava8/blob/master/docs/book/14-Streams.md#optional%E7%B1%BB
         //  顺便可以看看 Stream 的 API
-        if (id.isPresent())
-            return Result.success(userService.getUserById(id.get().longValue()), "OK");
-        else
-            return Result.error("234", "No Value Input");
+
+        return id.map(
+                i -> Result.success(userService.getUserById(id.get().longValue()), "OK")
+        ).orElse(Result.error("234", "No Value Input"));
+
+//        if (id.isPresent())
+//            return Result.success(userService.getUserById(id.get().longValue()), "OK");
+//        else
+//            return Result.error("234", "No Value Input");
     }
 
     @PostMapping("/getUserByName")
-    public Result<User> getUserByName(@RequestParam String name) {
+    public Result<User> getUserByName(@RequestBody String name) {
         User user = userService.getUserByName(name);
         if (user != null) {
             return Result.success(user, "OK");
@@ -84,13 +81,13 @@ public class UserController {
     }
 
     @PostMapping("/deleteByName")
-    public Result deleteUserByName(@RequestParam String name) {
+    public Result deleteUserByName(@RequestBody String name) {
         userService.deleteUserByName(name);
         return Result.success("OK!");
     }
 
     @PostMapping("/deleteById")
-    public Result deleteUserById(@RequestParam long id) {
+    public Result deleteUserById(@RequestBody long id) {
         userService.deleteUserById(id);
         return Result.success("OK!");
     }
@@ -102,19 +99,19 @@ public class UserController {
     }
 
     @PostMapping("/getAllPage")
-    public Result getAllPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+    public Result getAllPage(@RequestBody int pageNum, @RequestBody int pageSize) {
         Page<User> userPage = userService.paging(pageNum, pageSize);
         return Result.success(userPage);
     }
 
     @PostMapping("/getByAgeLessThanPage")
-    public Result getByAgeLessThanPage(@RequestParam int age, @RequestParam int pageNum, @RequestParam int pageSize) {
+    public Result getByAgeLessThanPage(@RequestBody int age, @RequestBody int pageNum, @RequestBody int pageSize) {
         Page<User> userPage = userService.findByAgeLessThanPage(age, pageNum, pageSize);
         return Result.success(userPage);
     }
 
     @PostMapping("/setDivisionToUser")
-    public Result setDivisionToUser(@RequestParam long divisionId, @RequestParam long userId) {
+    public Result setDivisionToUser(@RequestBody long divisionId, @RequestBody long userId) {
         User user = userService.getUserById(userId);
         Division division = divisionService.getDivisionById(divisionId);
         Set<Division> divisionSet = new HashSet<>();

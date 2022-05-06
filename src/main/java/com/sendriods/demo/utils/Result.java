@@ -1,73 +1,58 @@
 package com.sendriods.demo.utils;
 
+import lombok.Builder;
+import lombok.Data;
+
 // TODO 转换成 builder 形式
+@Builder
+@Data
 public class Result<T> {
     private String code;
     private String msg;
     private T data;
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
+    Result(String code, String msg, T data) {
         this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
         this.data = data;
     }
 
-    public Result() {
-    }
-
-    public Result(T data) {
-        this.data = data;
-    }
-
-    public static Result success() {
-        Result result = new Result<>();
-        result.setCode("0");
-        result.setMsg("成功");
-        return result;
+    public static Result<Object> success() {
+        return Result.builder()
+                .code(String.valueOf(0))
+                .msg("成功")
+                .build();
     }
 
     public static <T> Result<T> success(T data) {
-        Result<T> result = new Result<>(data);
-        result.setCode("0");
-        result.setMsg("成功");
-        return result;
+        return Result.<T>builder()
+                .data(data)
+                .msg("成功")
+                .code("0")
+                .build();
     }
 
     public static <T> Result<T> success(T data, String msg) {
-        Result<T> result = new Result<>(data);
-        result.setCode("0");
-        result.setMsg(msg);
+        Result<T> result = Result.<T>builder()
+                .data(data)
+                .msg(msg)
+                .code("0")
+                .build();
         return result;
     }
 
     public static Result success(String msg) {
-        Result result = new Result();
-        result.setMsg(msg);
+        Result<Object> result = Result.builder()
+                .msg(msg)
+                .build();
         return result;
     }
 
     public static Result error(String code, String msg) {
-        Result result = new Result();
-        result.setCode(code);
-        result.setMsg(msg);
+        Result<Object> result = Result.builder()
+                .msg(msg)
+                .code(code)
+                .build();
         return result;
     }
 }

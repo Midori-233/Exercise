@@ -65,10 +65,7 @@ public class DivisionServiceImpl implements DivisionService {
     }
 
     @Override
-    public Division updateDivision(long id, String divisionName, Integer classId) {
-        Division division = divisionRepository.findById(id).get();
-        division.setDivisionName(divisionName);
-        division.setDivisionId(classId);
+    public Division updateDivision(Division division) {
         divisionRepository.save(division);
         return division;
     }
