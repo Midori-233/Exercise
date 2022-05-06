@@ -1,9 +1,11 @@
 package com.sendriods.demo.Domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,26 +16,21 @@ public class Division implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // TODO column name 一般是用 _ 分隔单词 而不是驼峰命名法
-    //  也可以不填直接用 hibernate 生成，一般遇到数据库关键字时才会指定，比如 row column 之类的
+    /*
+      column name 一般是用 _ 分隔单词 而不是驼峰命名法
+      也可以不填直接用 hibernate 生成，一般遇到数据库关键字时才会指定，比如 row column 之类的
+    */
     @Column(name = "division_name")
     private String divisionName;
     @Column(name = "division_id")
     private Integer divisionId;
 
-    // FIXME toString 循环调用了
     @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "divisionSet")
-    private Set<User> userSet;
+    @ToString.Exclude
+    private Set<User> userSet = new HashSet<User>();
 
-    public Division() {
-    }
-
-    public Division(long id, String divisionName, Integer divisionId, Set<User> userSet) {
-        this.id = id;
-        this.divisionName = divisionName;
-        this.divisionId = divisionId;
-        this.userSet = userSet;
-    }
+    @OneToOne
+    private Director director;
 
     public void addUser(User user) {
         userSet.add(user);

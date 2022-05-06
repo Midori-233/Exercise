@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -20,53 +19,44 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
-    @Resource
-    private UserService userService;
+    final private UserService userService;
 
-    @Resource
-    private DivisionService divisionService;
+    final private DivisionService divisionService;
+
+    public UserController(UserService userService, DivisionService divisionService) {
+        this.userService = userService;
+        this.divisionService = divisionService;
+    }
 
     @PostMapping("/addUser")
-    public Result<User> addUser(
-            @RequestBody User user
-/*            @RequestParam String name,
-            @RequestParam Integer age,
-            @RequestParam String passwd*/) {
-        // TODO jpa save/update 之后是不会返回 null 的，如果发生错误的话会抛出异常而不会返回 null
-        userService.addUser(user);
-        return Result.success(user);
+    public Result<User> addUser(@RequestBody User user) {
+        //  jpa save/update 之后是不会返回 null 的，如果发生错误的话会抛出异常而不会返回 null
+        return Result.success(userService.addUser(user), "succeed！");
     }
 
-    // TODO update 使用 @PutMapping
+    //  update 使用 @PutMapping
     @PutMapping("/updateUser")
     public Result<User> updateUser(@RequestBody User user) {
-        return Result.success(user, "更新成功！");
+        return Result.success(user, "succeed！");
     }
 
-    @PostMapping("/getUserById")
-    public Result<User> getUserById(@RequestParam Optional<Long> id) {
-        // TODO 对于可能为空的类型，建议使用 Optional
-        //  参考 https://github.com/100TB/OnJava8/blob/master/docs/book/14-Streams.md#optional%E7%B1%BB
-        //  顺便可以看看 Stream 的 API
-
+    /*
+      对于可能为空的类型，建议使用 Optional
+      参考 https://github.com/100TB/OnJava8/blob/master/docs/book/14-Streams.md#optional%E7%B1%BB
+      顺便可以看看 Stream 的 API
+    */
+    @GetMapping("/getUserById")
+    public Result getUserById(@RequestParam Optional<Long> id) {
         return id.map(
-                i -> Result.success(userService.getUserById(id.get().longValue()), "OK")
+                i -> Result.success(userService.getUserById(id.get()), "succeed！")
         ).orElse(Result.error("234", "No Value Input"));
-
-//        if (id.isPresent())
-//            return Result.success(userService.getUserById(id.get().longValue()), "OK");
-//        else
-//            return Result.error("234", "No Value Input");
     }
 
-    @PostMapping("/getUserByName")
-    public Result<User> getUserByName(@RequestBody String name) {
-        User user = userService.getUserByName(name);
-        if (user != null) {
-            return Result.success(user, "OK");
-        } else {
-            return Result.error("233", "N");
-        }
+    @GetMapping("/getUserByName")
+    public Result getUserByName(@RequestParam Optional<String> name) {
+        return name.map(
+                i -> Result.success(userService.getUserByName(name.get()), "succeed！")
+        ).orElse(Result.error("234", "No Value Input"));
     }
 
     @GetMapping("/getAllUser")
@@ -80,42 +70,40 @@ public class UserController {
         return "hello";
     }
 
-    @PostMapping("/deleteByName")
+    @DeleteMapping("/deleteByName")
     public Result deleteUserByName(@RequestBody String name) {
         userService.deleteUserByName(name);
-        return Result.success("OK!");
+        return Result.success("succeed！");
     }
 
-    @PostMapping("/deleteById")
+    @DeleteMapping("/deleteById")
     public Result deleteUserById(@RequestBody long id) {
         userService.deleteUserById(id);
-        return Result.success("OK!");
+        return Result.success("succeed！!");
     }
 
-    @PostMapping("/deleteUser")
+    @DeleteMapping("/deleteUser")
     public Result deleteUser(User user) {
         userService.deleteUser(user);
-        return Result.success("OK!");
+        return Result.success("succeed！!");
     }
 
-    @PostMapping("/getAllPage")
+    @GetMapping("/getAllPage")
     public Result getAllPage(@RequestBody int pageNum, @RequestBody int pageSize) {
         Page<User> userPage = userService.paging(pageNum, pageSize);
-        return Result.success(userPage);
+        return Result.success(userPage, "succeed！");
     }
 
-    @PostMapping("/getByAgeLessThanPage")
+    @GetMapping("/getByAgeLessThanPage")
     public Result getByAgeLessThanPage(@RequestBody int age, @RequestBody int pageNum, @RequestBody int pageSize) {
         Page<User> userPage = userService.findByAgeLessThanPage(age, pageNum, pageSize);
-        return Result.success(userPage);
+        return Result.success(userPage, "succeed！");
     }
 
     @PostMapping("/setDivisionToUser")
     public Result setDivisionToUser(@RequestBody long divisionId, @RequestBody long userId) {
-        User user = userService.getUserById(userId);
-        Division division = divisionService.getDivisionById(divisionId);
         Set<Division> divisionSet = new HashSet<>();
-        divisionSet.add(division);
-        return Result.success(userService.setDivisionSet(divisionSet, user), "succeed！");
+        divisionSet.add(divisionService.getDivisionById(divisionId));
+        return Result.success(userService.setDivisionSet(divisionSet, userService.getUserById(userId)), "succeed！");
     }
 }

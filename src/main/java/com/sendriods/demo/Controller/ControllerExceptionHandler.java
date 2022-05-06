@@ -9,7 +9,7 @@ public class ControllerExceptionHandler {
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public String handleException1(Exception e) {
-        String msg = "Exception1:" + e.getMessage();
+        String msg = "Exception:" + e.getMessage();
         System.out.println(msg);
         return msg;
     }

@@ -1,34 +1,97 @@
 package com.sendriods.demo.Service;
 
+import com.sendriods.demo.Dao.UserRepository;
+import com.sendriods.demo.Domain.Division;
 import com.sendriods.demo.Domain.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
-public interface UserService {
+@Service
+public class UserService {
 
-    User getUserByName(String name);
+    final private UserRepository userRepository;
 
-    User addUser(User user);
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-    User updateUser(long id, String name, Integer age, String passwd);
+    public User getUserByName(String name) {
+        User user = userRepository.findByName(name).get();
+        return user;
+    }
 
-    List<User> getAllUser();
+    public User getUserById(long id) {
+        User user = userRepository.findById(id).get();
+        return user;
+    }
 
-    User deleteUserByName(String name);
+    public User addUser(User user) {
+        userRepository.save(user);
+        return user;
+    }
 
-    User deleteUserById(long id);
+    public User updateUser(long id, String name, Integer age, String passwd) {
+        User user = userRepository.findById(id).get();
+        user.setName(name);
+        user.setAge(age);
+        user.setPasswd(passwd);
+        userRepository.save(user);
+        return user;
+    }
 
-    User deleteUser(User user);
+    public List<User> getAllUser() {
+        return userRepository.findAll();
+    }
 
-    User getUserById(long id);
+    public User deleteUserByName(String name) {
+        User user = userRepository.findByName(name).get();
+        userRepository.delete(user);
+        return user;
+    }
 
-    Page<User> paging(int pageNum, int pageSize);
+    public User deleteUserById(long id) {
+        User user = userRepository.findById(id).get();
+        userRepository.delete(user);
+        return user;
+    }
 
-    Page<User> findByAgeLessThanPage(int age, int pageNum, int pageSize);
+    public User deleteUser(User user) {
+        userRepository.delete(user);
+        return user;
+    }
 
-    User setDivisionSet(Set divisionSet, User user);
+    public Page<User> paging(int pageNum, int pageSize) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        Page<User> userPage = userRepository.findAll(pageable);
+        userPage.getContent().forEach(System.out::println);
+        return userPage;
+    }
 
-    User addDivisionSet(Set divisionSet, User user);
+    public Page<User> findByAgeLessThanPage(int age, int pageNum, int pageSize) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        Page<User> userPage = userRepository.findByAgeLessThan(age, pageable);
+        return userPage;
+    }
+
+    public User setDivisionSet(Set divisionSet, User user) {
+        user.setDivisionSet(divisionSet);
+        userRepository.save(user);
+        return user;
+    }
+
+    public User addDivisionSet(Set divisionSet, User user) {
+        for (Object division : divisionSet) {
+            user.addDivision((Division) division);
+        }
+        userRepository.save(user);
+        return user;
+    }
 }

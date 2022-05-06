@@ -8,8 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface DivisionRepository extends JpaRepository<Division, Long> {
-    // TODO 对于返回单个查询结果的api 我们都会默认包个 Optional
-//    Optional<Division> findByDivisionName(String name);
+    //  对于返回单个查询结果的api 我们都会默认包个 Optional
     Optional<Division> findByDivisionName(String name);
 
     Optional<Division> findById(long id);

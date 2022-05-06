@@ -3,7 +3,6 @@ package com.sendriods.demo.utils;
 import lombok.Builder;
 import lombok.Data;
 
-// TODO 转换成 builder 形式
 @Builder
 @Data
 public class Result<T> {
@@ -19,7 +18,7 @@ public class Result<T> {
 
     public static Result<Object> success() {
         return Result.builder()
-                .code(String.valueOf(0))
+                .code("0")
                 .msg("成功")
                 .build();
     }
@@ -33,26 +32,23 @@ public class Result<T> {
     }
 
     public static <T> Result<T> success(T data, String msg) {
-        Result<T> result = Result.<T>builder()
+        return Result.<T>builder()
                 .data(data)
                 .msg(msg)
                 .code("0")
                 .build();
-        return result;
     }
 
     public static Result success(String msg) {
-        Result<Object> result = Result.builder()
+        return Result.builder()
                 .msg(msg)
                 .build();
-        return result;
     }
 
     public static Result error(String code, String msg) {
-        Result<Object> result = Result.builder()
+        return Result.builder()
                 .msg(msg)
                 .code(code)
                 .build();
-        return result;
     }
 }
