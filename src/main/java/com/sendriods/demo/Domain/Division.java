@@ -27,7 +27,7 @@ public class Division implements Serializable {
 
     @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "divisionSet")
     @ToString.Exclude
-    private Set<User> userSet = new HashSet<User>();
+    private Set<User> userSet = new HashSet<>();
 
     @OneToOne
     private Director director;
@@ -40,7 +40,6 @@ public class Division implements Serializable {
         userSet.remove(user);
     }
 
-    // FIXME equals 循环调用了
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

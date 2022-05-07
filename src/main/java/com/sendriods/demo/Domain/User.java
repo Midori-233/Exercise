@@ -73,7 +73,7 @@ public class User implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		User user = (User) o;
-		return id == user.id && Objects.equals(name, user.name) && Objects.equals(age, user.age) && Objects.equals(passwd, user.passwd) && Objects.equals(divisionSet, user.divisionSet);
+		return id == user.id && Objects.equals(name, user.name) && Objects.equals(age, user.age) && Objects.equals(passwd, user.passwd) && (user.divisionSet.hashCode() == divisionSet.hashCode());
 	}
 
 	@Override
