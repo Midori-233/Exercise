@@ -2,6 +2,7 @@ package com.sendriods.demo.Service;
 
 import com.sendriods.demo.Dao.DivisionRepository;
 import com.sendriods.demo.Dao.UserRepository;
+import com.sendriods.demo.Domain.Director;
 import com.sendriods.demo.Domain.Division;
 import com.sendriods.demo.Domain.User;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,7 @@ public class DivisionService {
         return division;
     }
 
-    public Division deleteUser(Division division) {
+    public Division delete(Division division) {
         divisionRepository.delete(division);
         return division;
     }
@@ -80,5 +81,10 @@ public class DivisionService {
         division.removeUser(user);
         divisionRepository.save(division);
         return division;
+    }
+
+    public Division setDirector(Division division, Director director) {
+        division.setDirector(director);
+        return divisionRepository.save(division);
     }
 }
