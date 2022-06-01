@@ -40,8 +40,8 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "name")
-	private String name;
+	@Column(name = "username")
+	private String username;
 
 	@Column(name = "age")
 	private Integer age;
@@ -49,8 +49,8 @@ public class User implements Serializable {
 	@Column(name = "passwd")
 	private String passwd;
 
-/*	  关于 cascade 的考量，默认情况下是不加的。
-	  需要根据业务需求来进行添加，绝不能一上来就给 ALL。*/
+	/*	  关于 cascade 的考量，默认情况下是不加的。
+          需要根据业务需求来进行添加，绝不能一上来就给 ALL。*/
 	@ManyToMany
 	@JsonIgnore
 /*	  对于 多对多关系 和 一对多 关系中使用 Set 还是 List 是要有考量的
@@ -59,6 +59,16 @@ public class User implements Serializable {
 	              更新 set 的时候，只会修改有变动的那一条数据
 	  3. 一般这种集合最好给个默认值，不然很容易出现空指针异常（这是我个人的理解，公司没有硬性规定，也没有一个定论）*/
 	private Set<Division> divisionSet = new HashSet<>();
+
+	public User(String username, Integer age, String passwd) {
+		this.username = username;
+		this.age = age;
+		this.passwd = passwd;
+	}
+
+	public User() {
+
+	}
 
 	public void addDivision(Division division) {
 		divisionSet.add(division);
@@ -73,11 +83,11 @@ public class User implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		User user = (User) o;
-		return id == user.id && Objects.equals(name, user.name) && Objects.equals(age, user.age) && Objects.equals(passwd, user.passwd) && (user.divisionSet.hashCode() == divisionSet.hashCode());
+		return id == user.id && Objects.equals(username, user.username) && Objects.equals(age, user.age) && Objects.equals(passwd, user.passwd) && (user.divisionSet.hashCode() == divisionSet.hashCode());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, age, passwd, divisionSet);
+		return Objects.hash(id, username, age, passwd, divisionSet);
 	}
 }

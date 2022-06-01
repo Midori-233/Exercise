@@ -22,13 +22,12 @@ public class UserService {
     }
 
     public User getUserByName(String name) {
-        User user = userRepository.findByName(name).get();
+        User user = userRepository.findByUsername(name).get();
         return user;
     }
 
     public User getUserById(long id) {
-        User user = userRepository.findById(id).get();
-        return user;
+        return userRepository.findById(id).get();
     }
 
     public User addUser(User user) {
@@ -38,7 +37,7 @@ public class UserService {
 
     public User updateUser(long id, String name, Integer age, String passwd) {
         User user = userRepository.findById(id).get();
-        user.setName(name);
+        user.setUsername(name);
         user.setAge(age);
         user.setPasswd(passwd);
         userRepository.save(user);
@@ -50,7 +49,7 @@ public class UserService {
     }
 
     public User deleteUserByName(String name) {
-        User user = userRepository.findByName(name).get();
+        User user = userRepository.findByUsername(name).get();
         userRepository.delete(user);
         return user;
     }
