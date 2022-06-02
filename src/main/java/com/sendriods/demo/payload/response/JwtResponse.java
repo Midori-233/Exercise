@@ -5,14 +5,16 @@ public class JwtResponse {
     private String type = "Bearer";
     private Long id;
     private String username;
+    private Integer age;
+
     private String email;
 
-    public JwtResponse(String accessToken, Long id, String username, String email) {
+    public JwtResponse(String accessToken, Long id, Integer age, String username, String email) {
         this.token = accessToken;
         this.id = id;
         this.username = username;
+        this.age = age;
         this.email = email;
-
     }
 
     public String getAccessToken() {
@@ -39,14 +41,6 @@ public class JwtResponse {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -55,4 +49,19 @@ public class JwtResponse {
         this.username = username;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

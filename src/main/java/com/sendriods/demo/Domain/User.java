@@ -43,11 +43,20 @@ public class User implements Serializable {
 	@Column(name = "username")
 	private String username;
 
+	@Column(name = "email")
+	private String email;
+
 	@Column(name = "age")
 	private Integer age;
 
 	@Column(name = "passwd")
 	private String passwd;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
 	/*	  关于 cascade 的考量，默认情况下是不加的。
           需要根据业务需求来进行添加，绝不能一上来就给 ALL。*/

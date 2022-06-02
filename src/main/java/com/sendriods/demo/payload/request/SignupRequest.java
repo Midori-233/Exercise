@@ -4,18 +4,18 @@ import com.sendriods.demo.Domain.Division;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 public class SignupRequest {
     @NotBlank
     @Size(min = 3, max = 20)
     private String username;
-
     private Integer age;
-
     private Division division;
-
     @Size(min = 6, max = 40)
     private String password;
+
+    private Set<String> role;
 
     public String getUsername() {
         return username;
@@ -47,5 +47,13 @@ public class SignupRequest {
 
     public void setDivision(Division division) {
         this.division = division;
+    }
+
+    public Set<String> getRole() {
+        return role;
+    }
+
+    public void setRole(Set<String> role) {
+        this.role = role;
     }
 }
